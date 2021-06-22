@@ -22,36 +22,52 @@ on:
 jobs:
   release:
     name: "Release"
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: "ubuntu-latest"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Determine if release should be drafted
-        run: |
-          set -x
-          if [ "${{ github.event.inputs.release }}" = "public" ]; then
-            echo "DRAFT=false" >> $GITHUB_ENV
-          else
-            echo "DRAFT=true" >> $GITHUB_ENV
-          fi
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      ### create release
-      - run: |
-          set -x
-          git tag ${{ github.event.inputs.release != '' }} 
-
-      - uses: marvinpinto/action-automatic-releases@latest
-        # if inputs.release if an empty string, we're running automatically
-        if: ${{ github.event.inputs.release != '' }}
+      - name: Create Release
+        uses: actions/create-release@v1
         with:
-          # changelog will be automatically generated from the history
-          # between tag env.BASE_VERSION (eg 0.1.0 or 0.2.0, etc)
-          # and the current commit
-          # automatic_release_tag: "${{ github.event.inputs.tag }}"
-          title: "Release"
-          draft: ${{ env.DRAFT }}
-          prerelease: false
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{steps.github_release.outputs.changelog}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Determine if release should be drafted
+      #   run: |
+      #     set -x
+      #     if [ "${{ github.event.inputs.release }}" = "public" ]; then
+      #       echo "DRAFT=false" >> $GITHUB_ENV
+      #     else
+      #       echo "DRAFT=true" >> $GITHUB_ENV
+      #     fi
+
+      # ### create release
+      # - run: |
+      #     set -x
+      #     git tag ${{ github.event.inputs.release != '' }} 
+
+      # - uses: marvinpinto/action-automatic-releases@latest
+      #   # if inputs.release if an empty string, we're running automatically
+      #   if: ${{ github.event.inputs.release != '' }}
+      #   with:
+      #     # changelog will be automatically generated from the history
+      #     # between tag env.BASE_VERSION (eg 0.1.0 or 0.2.0, etc)
+      #     # and the current commit
+      #     # automatic_release_tag: "${{ github.event.inputs.tag }}"
+      #     title: "Release"
+      #     draft: ${{ env.DRAFT }}
+      #     prerelease: false
+      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
 
