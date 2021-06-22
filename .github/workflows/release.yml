@@ -42,7 +42,7 @@ jobs:
           set -x
           git tag ${{ github.event.inputs.release != '' }} 
 
-      - uses: marvinpinto/action-automatic-releases@1.2.1
+      - uses: marvinpinto/action-automatic-releases@latest
         # if inputs.release if an empty string, we're running automatically
         if: ${{ github.event.inputs.release != '' }}
         with:
