@@ -38,6 +38,10 @@ jobs:
           fi
 
       ### create release
+      - run: |
+        set -x
+        git tag ${{ github.event.inputs.release != '' }} 
+
       - uses: marvinpinto/action-automatic-releases@1.2.1
         # if inputs.release if an empty string, we're running automatically
         if: ${{ github.event.inputs.release != '' }}
@@ -45,7 +49,7 @@ jobs:
           # changelog will be automatically generated from the history
           # between tag env.BASE_VERSION (eg 0.1.0 or 0.2.0, etc)
           # and the current commit
-          automatic_release_tag: "${{ github.event.inputs.tag }}"
+          # automatic_release_tag: "${{ github.event.inputs.tag }}"
           title: "Release"
           draft: ${{ env.DRAFT }}
           prerelease: false
