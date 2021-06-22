@@ -14,7 +14,7 @@ on:
         description: "Draft or public release?\nPut 'draft' to make a draft release"
         required: false
         default: 'public'
-      release:
+      tag:
         description: "Release tag"
         required: true
         default: 'v0.1.0'
@@ -51,4 +51,3 @@ jobs:
           prerelease: false
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
 
-          
