@@ -2,22 +2,8 @@ name: "release"
 
 on:
   push:
-    # uncomment to release only on tags starting with 'v'
-    # tags:
-    #   - "v*"
-    branches:
-      - "main"
-
-  workflow_dispatch:
-    inputs:
-      release:
-        description: "Draft or public release?\nPut 'draft' to make a draft release"
-        required: false
-        default: 'public'
-      tag:
-        description: "Release tag"
-        required: true
-        default: 'v0.1.0'
+    tags:
+      - '*'
 
 jobs:
   release:
