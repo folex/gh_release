@@ -1,0 +1,54 @@
+name: "release"
+
+on:
+  push:
+    # uncomment to release only on tags starting with 'v'
+    # tags:
+    #   - "v*"
+    branches:
+      - "main"
+
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Draft or public release?\nPut 'draft' to make a draft release"
+        required: false
+        default: 'public'
+      release:
+        description: "Release tag"
+        required: true
+        default: 'v0.1.0'
+
+jobs:
+  release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Determine if release should be drafted
+        run: |
+          set -x
+          if [ "${{ github.event.inputs.release }}" = "public" ]; then
+            echo "DRAFT=false" >> $GITHUB_ENV
+          else
+            echo "DRAFT=true" >> $GITHUB_ENV
+          fi
+
+      ### create release
+      - uses: marvinpinto/action-automatic-releases@latest
+        # if inputs.release if an empty string, we're running automatically
+        if: ${{ github.event.inputs.release != '' }}
+        with:
+          # changelog will be automatically generated from the history
+          # between tag env.BASE_VERSION (eg 0.1.0 or 0.2.0, etc)
+          # and the current commit
+          automatic_release_tag: "${{ github.event.inputs.tag }}"
+          title: "Release"
+          draft: ${{ env.DRAFT }}
+          prerelease: false
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+
+          
