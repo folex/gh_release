@@ -39,8 +39,8 @@ jobs:
 
       ### create release
       - run: |
-        set -x
-        git tag ${{ github.event.inputs.release != '' }} 
+          set -x
+          git tag ${{ github.event.inputs.release != '' }} 
 
       - uses: marvinpinto/action-automatic-releases@1.2.1
         # if inputs.release if an empty string, we're running automatically
