@@ -38,7 +38,7 @@ jobs:
           fi
 
       ### create release
-      - uses: marvinpinto/action-automatic-releases@latest
+      - uses: marvinpinto/action-automatic-releases@1.2.1
         # if inputs.release if an empty string, we're running automatically
         if: ${{ github.event.inputs.release != '' }}
         with:
