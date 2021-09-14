@@ -25,7 +25,7 @@ jobs:
 
       - name: Emulate 'cargo ws list -l'
         run: |
-          WS_LIST=$(cat ./ws_list)
+          WS_LIST="$(cat ./ws_list)"
           echo "WS_LIST='$WS_LIST'" | tee -a $GITHUB_ENV
 
       - name: Build link list
