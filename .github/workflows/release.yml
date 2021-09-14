@@ -82,6 +82,7 @@ jobs:
           name: GH Release Test Suite ${{ github.ref }}
           tag_name: ${{ github.ref }}
           body: |
+            ## Changelog
             ${{steps.changelog.outputs.changelog}}
 
             ## crates.io
