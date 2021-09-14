@@ -63,19 +63,34 @@ jobs:
               throw e;
             }
 
-      - name: Create Release
-        uses: actions/create-release@v1
+      # - name: Create Release
+      #   uses: actions/create-release@v1
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: ${{ github.ref }}
+      #     body: |
+      #       ${{steps.github_release.outputs.changelog}}
+
+      #       ## crates.io
+      #       ${{ steps.link_list.outputs.result }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
+          name: GH Release Test Suite ${{ github.ref }}
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
           body: |
-            ${{steps.github_release.outputs.changelog}}
+            ${{steps.changelog.outputs.changelog}}
 
             ## crates.io
             ${{ steps.link_list.outputs.result }}
-
+          draft: false
+          prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       # - name: Determine if release should be drafted
       #   run: |
