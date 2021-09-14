@@ -1,0 +1,11 @@
+fluence-app-service       v0.9.0  fluence-app-service
+fluence-faas              v0.9.0  fluence-faas
+marine                    v0.6.12 tools/cli
+marine-it-generator       v0.5.4  crates/it-generator
+marine-it-interfaces      v0.4.1  crates/it-interfaces
+marine-it-parser          v0.6.6  crates/it-parser
+marine-module-info-parser v0.2.0  crates/module-info-parser
+marine-module-interface   v0.1.5  crates/module-interface
+marine-runtime            v0.7.0  runtime
+marine-utils              v0.2.0  crates/utils
+mrepl                     v0.9.1  tools/repl

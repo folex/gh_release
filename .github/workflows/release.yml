@@ -23,12 +23,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Emulate 'cargo ws list -l'
+        run: |
+          WS_LIST=$(cat ./ws_list)
+          echo "WS_LIST=$WS_LIST" | tee -a $GITHUB_ENV
+
+      - name: Build link list
+        run: |
+          LINK_LIST=""
+          while IFS= read -r line
+          do
+            ITEM=$(echo $line | awk '{ printf "- [%s %s](https://crates.io/crates/%s/%s)", $1, $2, $1, $2 }')
+            LINK_LIST+="${ITEM}\n"
+          done <<< "${{ env.WS_LIST }}"
+          echo "LINK_LIST=$LINK_LIST" | tee -a $GITHUB_ENV
+
       - name: Create Release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body: ${{steps.github_release.outputs.changelog}}
+          body: |
+            ${{steps.github_release.outputs.changelog}}
+
+            ## crates.io
+            ${{ env.LINK_LIST }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
