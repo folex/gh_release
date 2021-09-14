@@ -52,9 +52,12 @@ jobs:
             try {
                 let ws_list = `${{ env.WS_LIST }}`
                 console.log("ws_list: ", ws_list);
-                let splitted = ws_list.split("\n");
-                console.dir(splitted);
-                return ws_list;
+                let lines = ws_list.split("\n");
+                let columns = lines.map(l => l.split(' ').filter(e => e.length > 0));
+                let link_list = columns.map(line => 
+                  `- [${line[0]} ${line[1]}](https://crates.io/crates/${line[0]}/${line[1]})`
+                ).join('\n');
+                return link_list;
             } catch (e) {
               console.log("Err: " + e);
               throw e;
@@ -69,7 +72,8 @@ jobs:
             ${{steps.github_release.outputs.changelog}}
 
             ## crates.io
-            ${{ env.LINK_LIST }}
+            ${{ steps.link_list.outputs.result }}
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
