@@ -42,6 +42,24 @@ jobs:
           echo "$LINK_LIST" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Build link list with JS
+        id: link_list
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            try {
+                let ws_list = `${{ env.WS_LIST }}`
+                console.log("ws_list: ", ws_list);
+                let splitted = ws_list.split("\n");
+                console.dir(splitted);
+                return ws_list;
+            } catch (e) {
+              console.log("Err: " + e);
+              throw e;
+            }
+
       - name: Create Release
         uses: actions/create-release@v1
         with:
