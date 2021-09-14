@@ -35,8 +35,8 @@ jobs:
           LINK_LIST=""
           while IFS= read -r line
           do
-            ITEM=$(echo $line | awk '{ printf "- [%s %s](https://crates.io/crates/%s/%s)", $1, $2, $1, $2 }')
-            LINK_LIST+="${ITEM}\n"
+            ITEM=$(echo $line | awk '{ printf "- [%s %s](https://crates.io/crates/%s/%s)\n", $1, $2, $1, $2 }')
+            LINK_LIST+="${ITEM}"
           done <<< "${{ env.WS_LIST }}"
           echo "LINK_LIST<<EOF" >> $GITHUB_ENV
           echo "$LINK_LIST" >> $GITHUB_ENV
