@@ -86,8 +86,8 @@ jobs:
 
             ## crates.io
             ${{ steps.link_list.outputs.result }}
-          draft: false
-          prerelease: true
+          draft: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
