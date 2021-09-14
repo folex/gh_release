@@ -26,7 +26,9 @@ jobs:
       - name: Emulate 'cargo ws list -l'
         run: |
           WS_LIST="$(cat ./ws_list)"
-          echo "WS_LIST='$WS_LIST'" >> $GITHUB_ENV
+          echo "WS_LIST<<EOF" >> $GITHUB_ENV
+          echo "$WS_LIST" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Build link list
         run: |
@@ -36,7 +38,9 @@ jobs:
             ITEM=$(echo $line | awk '{ printf "- [%s %s](https://crates.io/crates/%s/%s)", $1, $2, $1, $2 }')
             LINK_LIST+="${ITEM}\n"
           done <<< "${{ env.WS_LIST }}"
-          echo "LINK_LIST=$LINK_LIST" | tee -a $GITHUB_ENV
+          echo "LINK_LIST<<EOF" >> $GITHUB_ENV
+          echo "$LINK_LIST" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Create Release
         uses: actions/create-release@v1
